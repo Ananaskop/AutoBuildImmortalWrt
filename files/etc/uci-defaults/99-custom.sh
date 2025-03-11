@@ -101,7 +101,27 @@ uci commit
 
 # 设置编译作者信息
 FILE_PATH="/etc/openwrt_release"
-NEW_DESCRIPTION="Compiled by wukongdaily"
+NEW_DESCRIPTION="Compiled by Ananaskop"
 sed -i "s/DISTRIB_DESCRIPTION='[^']*'/DISTRIB_DESCRIPTION='$NEW_DESCRIPTION'/" "$FILE_PATH"
+
+# 检查/bin/bash是否存在（防止未安装bash时出错）
+if [ -x "/bin/bash" ]; then
+    echo "Start modifying root shell to bash..." >> $LOGFILE
+    # 确保bash在合法shell列表
+    grep -qxF '/bin/bash' /etc/shells || echo "/bin/bash" >> /etc/shells
+    # 修改root用户默认shell（两种方式任选其一）
+    # 方式1：直接修改/etc/passwd
+    sed -i 's|^root:[^:]*:[^:]*:[^:]*:[^:]*:[^:]*:.*$|root:x:0:0:root:/root:/bin/bash|' /etc/passwd
+    # 方式2：使用busybox的chsh（需确认可用性）
+    # chsh -s /bin/bash root >> $LOGFILE 2>&1
+    # 创建兼容性链接（重要：部分系统服务依赖/bin/sh）
+    [ -L /bin/sh ] && rm -f /bin/sh
+    ln -sf /bin/bash /bin/sh
+    # 验证修改结果
+    echo "Current root shell: $(grep ^root /etc/passwd | cut -d: -f7)" >> $LOGFILE
+    echo "sh link status: $(ls -l /bin/sh)" >> $LOGFILE
+else
+    echo "ERROR: /bin/bash not found! Check bash installation." >> $LOGFILE
+fi
 
 exit 0
