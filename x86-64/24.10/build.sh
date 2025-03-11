@@ -42,7 +42,10 @@ PACKAGES="$PACKAGES snmpd"
 PACKAGES="$PACKAGES socat"
 PACKAGES="$PACKAGES fdisk"
 PACKAGES="$PACKAGES nginx"
+PACKAGES="$PACKAGES luci-compat"
+PACKAGES="$PACKAGES luci-mod-rpc"
 PACKAGES="$PACKAGES script-utils"
+PACKAGES="$PACKAGES luci-lib-ipkg"
 PACKAGES="$PACKAGES luci-i18n-samba4-zh-cn"
 
 # 判断是否需要编译 Docker 插件
