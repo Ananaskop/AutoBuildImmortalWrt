@@ -37,7 +37,11 @@ PACKAGES="$PACKAGES luci-i18n-ttyd-zh-cn"
 PACKAGES="$PACKAGES luci-app-openclash"
 PACKAGES="$PACKAGES openssh-sftp-server"
 # 增加几个必备组件 方便用户安装iStore
+
+PACKAGES="$PACKAGES snmpd"
+PACKAGES="$PACKAGES socat"
 PACKAGES="$PACKAGES fdisk"
+PACKAGES="$PACKAGES nginx"
 PACKAGES="$PACKAGES script-utils"
 PACKAGES="$PACKAGES luci-i18n-samba4-zh-cn"
 
