@@ -34,24 +34,27 @@ on:
 jobs:
   build:
     runs-on: ubuntu-22.04
-
     steps:
       - name: Checkout code
         uses: actions/checkout@v3
-
+      - name: Verify build.sh existence
+        run: |
+          echo "当前工作目录: $(pwd)"
+          ls -R ${{ github.workspace }}/x86-64
+          if [ ! -f "${{ github.workspace }}/x86-64/24.10/build.sh" ]; then
+            echo "❌ 错误：build.sh 文件未找到！"
+            exit 1
+          fi
       - name: Set executable permissions
-        run: chmod +x ${{ github.workspace }}/x86-64/build.sh
-
-
+        run: chmod +x ${{ github.workspace }}/x86-64/24.10/build.sh
       - name: Validate PPPoE Inputs
         run: |
-          if [[ "${{ inputs.enable_pppoe }}" == "yes" ]]; then
-            if [[ -z "${{ inputs.pppoe_account }}" || -z "${{ inputs.pppoe_password }}" ]]; then
-              echo "Error: PPPoE account and password must be provided when PPPoE is enabled!"
+          if [[ "${{ github.event.inputs.enable_pppoe }}" == "yes" ]]; then
+            if [[ -z "${{ github.event.inputs.pppoe_account }}" || -z "${{ github.event.inputs.pppoe_password }}" ]]; then
+              echo "Error: PPPoE账号和密码必须提供！"
               exit 1
             fi
           fi
-
       - name: Build ImmortalWrt-x86-64-efi
         run: |
           profiles="${{ github.event.inputs.profile }}"
@@ -69,11 +72,12 @@ jobs:
               -v "${{ github.workspace }}/x86-64/24.10/build.sh:/home/build/immortalwrt/build.sh" \
               -e PROFILE=$profile \
               -e INCLUDE_DOCKER=$include_docker \
-              -e ENABLE_PPPOE=${{ inputs.enable_pppoe }} \
-              -e PPPOE_ACCOUNT=${{ inputs.pppoe_account }} \
-              -e PPPOE_PASSWORD=${{ inputs.pppoe_password }} \
+              -e ENABLE_PPPOE=${{ github.event.inputs.enable_pppoe }} \
+              -e PPPOE_ACCOUNT="${{ github.event.inputs.pppoe_account }}" \
+              -e PPPOE_PASSWORD="${{ github.event.inputs.pppoe_password }}" \
               immortalwrt/imagebuilder:x86-64-openwrt-24.10.0 /bin/bash /home/build/immortalwrt/build.sh
           done
+
 
       - name: Generate Firmware SHA-256
         run: |
