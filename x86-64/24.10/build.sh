@@ -41,13 +41,12 @@ PACKAGES="$PACKAGES openssl-util"
 PACKAGES="$PACKAGES luci-mod-rpc"
 PACKAGES="$PACKAGES script-utils"
 PACKAGES="$PACKAGES luci-lib-ipkg"
-PACKAGES="$PACKAGES luci-app-acme"
-PACKAGES="$PACKAGES luci-i18n-acme-zh-cn"
 PACKAGES="$PACKAGES luci-i18n-samba4-zh-cn"
 PACKAGES="$PACKAGES luci-app-ddns"
 PACKAGES="$PACKAGES luci-i18n-ddns-zh-cn"
 PACKAGES="$PACKAGES ddns-scripts-cloudflare"
 PACKAGES="$PACKAGES ddns-scripts_aliyun"
+PACKAGES="$PACKAGES acme-acmesh"
 
 # 判断是否需要编译 Docker 插件
 if [ "$INCLUDE_DOCKER" = "yes" ]; then
