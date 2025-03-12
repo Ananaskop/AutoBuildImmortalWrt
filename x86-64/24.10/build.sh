@@ -46,6 +46,10 @@ PACKAGES="$PACKAGES luci-i18n-acme-zh-cn"
 PACKAGES="$PACKAGES luci-i18n-samba4-zh-cn"
 PACKAGES="$PACKAGES luci-app-ddns"
 PACKAGES="$PACKAGES luci-i18n-ddns-zh-cn"
+PACKAGES="$PACKAGES ddns-scripts-cloudflare"
+PACKAGES="$PACKAGES ddns-scripts_aliyun"
+PACKAGES="$PACKAGES luci-app-alist"
+PACKAGES="$PACKAGES luci-i18n-alist-zh-cn"
 
 # 判断是否需要编译 Docker 插件
 if [ "$INCLUDE_DOCKER" = "yes" ]; then
