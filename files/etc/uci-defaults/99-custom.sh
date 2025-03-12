@@ -18,20 +18,21 @@ SETTINGS_FILE="/etc/config/pppoe-settings"
 if [ ! -f "$SETTINGS_FILE" ]; then
     echo "PPPoE settings file not found. Skipping." >> $LOGFILE
 else
-   . "$SETTINGS_FILE"
+    . "$SETTINGS_FILE"
 fi
 
-# 检查是否已存在网络配置文件，若存在则跳过网络配置
-NETWORK_FILE="/etc/config/network"
-if [ -f "$NETWORK_FILE" ]; then
-    echo "Network configuration file exists. Skipping network configuration." >> $LOGFILE
+# 网络配置部分：使用标记文件判断是否已配置网络
+NETWORK_CONFIG_MARKER="/etc/.network_configured"
+if [ -f "$NETWORK_CONFIG_MARKER" ]; then
+    echo "Network configuration already applied. Skipping network configuration." >> $LOGFILE
 else
-    # 计算网卡数量
+    echo "No network configuration marker found. Proceeding with network configuration." >> $LOGFILE
+
+    # 计算物理网卡数量和名称（排除回环和无线设备）
     count=0
     ifnames=""
     for iface in /sys/class/net/*; do
       iface_name=$(basename "$iface")
-      # 仅统计物理网卡（排除回环设备和无线设备）
       if [ -e "$iface/device" ] && echo "$iface_name" | grep -Eq '^eth|^en'; then
         count=$((count + 1))
         ifnames="$ifnames $iface_name"
@@ -43,10 +44,10 @@ else
     if [ "$count" -eq 1 ]; then
        # 单网口设备，使用 DHCP 获取 IP
        uci set network.lan.proto='dhcp'
+       echo "Single interface detected. Setting LAN to DHCP." >> $LOGFILE
     elif [ "$count" -gt 1 ]; then
-       # 提取第一个接口作为 WAN
+       # 多网口设备配置：第一个接口作为 WAN，其他接口分配给 LAN
        wan_ifname=$(echo "$ifnames" | awk '{print $1}')
-       # 剩余接口分配给 LAN
        lan_ifnames=$(echo "$ifnames" | cut -d ' ' -f2-)
        
        # 设置 WAN 口
@@ -58,39 +59,42 @@ else
        uci set network.wan6=interface
        uci set network.wan6.device="$wan_ifname"
        
-       # 更新 LAN 口的接口成员
-       section=$(uci show network | awk -F '[.=]' '/\.\@?device\[\d+\]\.name=.br-lan.$/ {print $2; exit}')
-       if [ -z "$section" ]; then
-          echo "error：cannot find device 'br-lan'." >> $LOGFILE
+       # 更新 LAN 口的接口成员：查找 br-lan 对应的 section
+       brlan_section=$(uci show network | grep -E "network\..*\.device='br-lan'" | cut -d'.' -f2 | head -n1)
+       if [ -z "$brlan_section" ]; then
+          echo "Error: cannot find device 'br-lan'." >> $LOGFILE
        else
-          # 删除原来的端口列表
-          uci -q delete "network.$section.ports"
+          uci -q delete "network.$brlan_section.ports"
           for port in $lan_ifnames; do
-             uci add_list "network.$section.ports"="$port"
+             uci add_list "network.$brlan_section.ports"="$port"
           done
-          echo "ports of device 'br-lan' are updated." >> $LOGFILE
+          echo "Ports of device 'br-lan' updated: $lan_ifnames" >> $LOGFILE
        fi
        
        # LAN 口设置静态 IP
        uci set network.lan.proto='static'
        uci set network.lan.ipaddr='192.168.11.1'
        uci set network.lan.netmask='255.255.255.0'
-       echo "set 192.168.11.1 at $(date)" >> $LOGFILE
+       echo "Set LAN IP to 192.168.11.1 at $(date)" >> $LOGFILE
        
        # 判断是否启用 PPPoE
        if [ "$enable_pppoe" = "yes" ]; then
           echo "PPPoE is enabled at $(date)" >> $LOGFILE
           uci set network.wan.proto='pppoe'
-          uci set network.wan.username=$pppoe_account
-          uci set network.wan.password=$pppoe_password
+          uci set network.wan.username="$pppoe_account"
+          uci set network.wan.password="$pppoe_password"
           uci set network.wan.peerdns='1'
           uci set network.wan.auto='1'
           uci set network.wan6.proto='none'
-          echo "PPPoE configuration completed successfully." >> $LOGFILE
+          echo "PPPoE configuration completed." >> $LOGFILE
        else
-          echo "PPPoE is not enabled. Skipping configuration." >> $LOGFILE
+          echo "PPPoE is not enabled. Skipping PPPoE configuration." >> $LOGFILE
        fi
     fi
+
+    # 配置完成后，创建标记文件以防止后续覆盖
+    touch "$NETWORK_CONFIG_MARKER"
+    echo "Network configuration completed at $(date)." >> $LOGFILE
 fi
 
 # 允许所有网口访问网页终端
@@ -107,7 +111,7 @@ sed -i "s/DISTRIB_DESCRIPTION='[^']*'/DISTRIB_DESCRIPTION='$NEW_DESCRIPTION'/" "
 
 # 检查 /bin/bash 是否存在，防止未安装 bash 时出错
 if [ -x "/bin/bash" ]; then
-    echo "Start modifying root shell to bash..." >> $LOGFILE
+    echo "Modifying root shell to bash..." >> $LOGFILE
     grep -qxF '/bin/bash' /etc/shells || echo "/bin/bash" >> /etc/shells
     sed -i 's|^root:[^:]*:[^:]*:[^:]*:[^:]*:[^:]*:.*$|root:x:0:0:root:/root:/bin/bash|' /etc/passwd
     [ -L /bin/sh ] && rm -f /bin/sh
