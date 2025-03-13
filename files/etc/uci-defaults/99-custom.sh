@@ -25,6 +25,8 @@ fi
 NETWORK_CONFIG_MARKER="/etc/.network_configured"
 if [ -f "$NETWORK_CONFIG_MARKER" ]; then
     echo "Network configuration already applied. Skipping network configuration." >> $LOGFILE
+    # 这是升级情况，不修改任何网络配置，立即退出网络配置部分
+    exit 0
 else
     echo "No network configuration marker found. Proceeding with network configuration." >> $LOGFILE
     
@@ -42,7 +44,7 @@ else
     ifnames=$(echo "$ifnames" | awk '{$1=$1};1')
 
     if [ "$count" -eq 1 ]; then
-       # 单网口设备，使用 DHCP 获取 IP
+       # 单网口设备，首次安装时使用 DHCP 获取 IP
        uci set network.lan.proto='dhcp'
        echo "Single interface detected. Setting LAN to DHCP." >> $LOGFILE
     elif [ "$count" -gt 1 ]; then
