@@ -5,7 +5,7 @@ LOGFILE="/tmp/uci-defaults-log.txt"
 echo "Starting 99-custom.sh at $(date)" >> $LOGFILE
 
 # 网络配置部分
-NETWORK_CONFIG_MARKER="/etc/.network_configured"
+NETWORK_CONFIG_MARKER="/opt/.network_configured"
 
 if [ -f "$NETWORK_CONFIG_MARKER" ]; then
     echo "Network configuration already applied. Skipping network configuration." >> $LOGFILE
