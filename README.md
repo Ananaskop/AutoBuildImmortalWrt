@@ -7,6 +7,8 @@ Fork from https://github.com/wukongdaily/AutoBuildImmortalWrt
 > 2、支持预安装docker（可选）<br>
 > 3、仅支持x86-64<br>
 > 4、新增用户预设置pppoe拨号功能<br>
+> 5、增加了升级不修改网络配置<br>
+> 6、可以自行修改build.sh增加插件<br>
 
 ## 如何查询都有哪些插件?
 https://mirrors.sjtug.sjtu.edu.cn/immortalwrt/releases/24.10.0/packages/x86_64/luci/ 
