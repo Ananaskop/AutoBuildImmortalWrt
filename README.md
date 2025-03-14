@@ -11,7 +11,7 @@ Fork from https://github.com/wukongdaily/AutoBuildImmortalWrt
 > 6、可以自行修改build.sh增加插件<br>
 
 ## 如何查询都有哪些插件?
-https://mirrors.sjtug.sjtu.edu.cn/immortalwrt/releases/23.05.04/packages/x86_64/luci/ 
+https://mirrors.sjtug.sjtu.edu.cn/immortalwrt/releases/23.05.4/packages/x86_64/luci/
 
 ## 旁路由的用户必读
 近期不少用户修改配置文件中的默认ip地址，误认为这个工作流可以直接设置旁路ip。这是巨大的误解，这样设置就乱套了。<br>
