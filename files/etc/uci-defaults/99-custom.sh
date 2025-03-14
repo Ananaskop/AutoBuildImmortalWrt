@@ -102,17 +102,4 @@ FILE_PATH="/etc/openwrt_release"
 NEW_DESCRIPTION="Compiled by Ananaskop"
 sed -i "s/DISTRIB_DESCRIPTION='[^']*'/DISTRIB_DESCRIPTION='$NEW_DESCRIPTION'/" "$FILE_PATH"
 
-# 确保 root 账户默认使用 bash（如果 bash 已安装）
-if [ -x "/bin/bash" ]; then
-    echo "Modifying root shell to bash..." >> $LOGFILE
-    grep -qxF '/bin/bash' /etc/shells || echo "/bin/bash" >> /etc/shells
-    sed -i 's|^root:[^:]*:[^:]*:[^:]*:[^:]*:[^:]*:.*$|root:x:0:0:root:/root:/bin/bash|' /etc/passwd
-    [ -L /bin/sh ] && rm -f /bin/sh
-    ln -sf /bin/bash /bin/sh
-    echo "Current root shell: $(grep ^root /etc/passwd | cut -d: -f7)" >> $LOGFILE
-    echo "sh link status: $(ls -l /bin/sh)" >> $LOGFILE
-else
-    echo "ERROR: /bin/bash not found! Check bash installation." >> $LOGFILE
-fi
-
 exit 0
