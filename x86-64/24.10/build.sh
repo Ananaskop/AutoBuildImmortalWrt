@@ -41,7 +41,8 @@ PACKAGES="$PACKAGES luci-mod-rpc"
 PACKAGES="$PACKAGES luci-lib-ipkg"
 PACKAGES="$PACKAGES luci-app-ddns"
 PACKAGES="$PACKAGES luci-i18n-ddns-zh-cn"
-
+PACKAGES="$PACKAGES ddns-scripts-aliyun"
+PACKAGES="$PACKAGES ddns-scripts-cloudflare"
 
 # 增加几个必备组件 方便用户安装iStore
 PACKAGES="$PACKAGES fdisk"
