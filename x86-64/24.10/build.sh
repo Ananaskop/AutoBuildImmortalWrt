@@ -21,6 +21,7 @@ cat /home/build/immortalwrt/files/etc/config/pppoe-settings
 echo "$(date '+%Y-%m-%d %H:%M:%S') - 开始编译..."
 
 
+
 # 定义所需安装的包列表 下列插件你都可以自行删减
 PACKAGES=""
 PACKAGES="$PACKAGES curl"
@@ -33,19 +34,21 @@ PACKAGES="$PACKAGES luci-app-openclash"
 PACKAGES="$PACKAGES openssh-sftp-server"
 PACKAGES="$PACKAGES snmpd"
 PACKAGES="$PACKAGES socat"
-PACKAGES="$PACKAGES fdisk"
-PACKAGES="$PACKAGES luci-i18n-opkg-zh-cn"
-PACKAGES="$PACKAGES nginx-full"
+PACKAGES="$PACKAGES luci-i18n-package-manager-zh-cn"
 PACKAGES="$PACKAGES luci-compat"
 PACKAGES="$PACKAGES openssl-util"
 PACKAGES="$PACKAGES luci-mod-rpc"
-PACKAGES="$PACKAGES script-utils"
 PACKAGES="$PACKAGES luci-lib-ipkg"
-PACKAGES="$PACKAGES luci-i18n-samba4-zh-cn"
 PACKAGES="$PACKAGES luci-app-ddns"
 PACKAGES="$PACKAGES luci-i18n-ddns-zh-cn"
 PACKAGES="$PACKAGES ddns-scripts-cloudflare"
 PACKAGES="$PACKAGES ddns-scripts_aliyun"
+
+
+# 增加几个必备组件 方便用户安装iStore
+PACKAGES="$PACKAGES fdisk"
+PACKAGES="$PACKAGES script-utils"
+PACKAGES="$PACKAGES luci-i18n-samba4-zh-cn"
 
 # 判断是否需要编译 Docker 插件
 if [ "$INCLUDE_DOCKER" = "yes" ]; then
