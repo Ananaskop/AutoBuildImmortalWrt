@@ -48,6 +48,8 @@ PACKAGES="$PACKAGES nginx-full"
 PACKAGES="$PACKAGES zsh"
 PACKAGES="$PACKAGES git"
 PACKAGES="$PACKAGES git-http"
+PACKAGES="$PACKAGES shadow-chsh"
+PACKAGES="$PACKAGES shadow-common"
 
 # 增加几个必备组件 方便用户安装iStore
 PACKAGES="$PACKAGES fdisk"
