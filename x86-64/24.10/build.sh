@@ -45,6 +45,9 @@ PACKAGES="$PACKAGES ddns-scripts_aliyun"
 PACKAGES="$PACKAGES ddns-scripts-cloudflare"
 PACKAGES="$PACKAGES nginx-ssl-util"
 PACKAGES="$PACKAGES nginx-full"
+PACKAGES="$PACKAGES zsh"
+PACKAGES="$PACKAGES git"
+PACKAGES="$PACKAGES git-http"
 
 # 增加几个必备组件 方便用户安装iStore
 PACKAGES="$PACKAGES fdisk"
