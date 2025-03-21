@@ -92,27 +92,6 @@ uci delete ttyd.@ttyd[0].interface
 uci set dropbear.@dropbear[0].Interface=''
 uci commit
 
-# 设置主机名解析，解决安卓 TV 网络问题
-CHECK_DOMAIN_ENTRY() {
-    awk 'BEGIN { FS="[ \t'\'']+"; found=0 }
-        /^config[ \t]+domain/ { in_domain=1; current_name=""; current_ip="" }
-        in_domain && /^[ \t]*option[ \t]+name[ \t]+'\''time\.android\.com'\''/ { current_name=$4 }
-        in_domain && /^[ \t]*option[ \t]+ip[ \t]+'\''203\.107\.6\.88'\''/ { current_ip=$4 }
-        /^[ \t]*$/ || /^config/ {
-            if (in_domain && current_name && current_ip) { found=1 }
-            in_domain=0
-        }
-        END { exit !found }' /etc/config/dhcp
-}
-if CHECK_DOMAIN_ENTRY; then
-    echo "DHCP domain entry already exists. Skip adding." >> $LOGFILE
-else
-    uci add dhcp domain
-    uci set "dhcp.@domain[-1].name=time.android.com"
-    uci set "dhcp.@domain[-1].ip=203.107.6.88"
-    echo "Added DHCP domain entry for Android TV." >> $LOGFILE
-fi
-
 # 修改编译者信息
 FILE_PATH="/etc/openwrt_release"
 NEW_DESCRIPTION="Compiled by Ananaskop"
