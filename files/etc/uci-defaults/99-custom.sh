@@ -112,6 +112,7 @@ HISTFILE=~/.zsh_history
 HISTSIZE=1000
 SAVEHIST=1000
 setopt appendhistory
+
 # 启用 Git 信息提示
 autoload -Uz vcs_info
 precmd_vcs_info() { vcs_info }
@@ -124,7 +125,7 @@ PROMPT='%F{green}➜%f %F{blue}%1~%f%F{red}${vcs_info_msg_0_}%f %# '
 
 # 增加banner显示
 if [[ -t 1 ]]; then
-  cat /etc/banner
+  echo "Welcome to Zsh! $(date '+%Y-%m-%d %H:%M:%S')"
 fi
 
 EOF
