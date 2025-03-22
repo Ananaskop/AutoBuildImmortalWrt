@@ -99,4 +99,30 @@ sed -i "s/DISTRIB_DESCRIPTION='[^']*'/DISTRIB_DESCRIPTION='$NEW_DESCRIPTION'/" "
 
 chsh -s /usr/bin/zsh
 
+# 增加zsh历史记录配置
+configure_zsh() {
+    ZSHRC_FILE="/root/.zshrc"
+    ZSH_HISTORY_FILE="/root/.zsh_history"
+    if [ ! -f "$ZSHRC_FILE" ]; then
+        echo "Creating $ZSHRC_FILE..." >> $LOGFILE
+        # <修改> 删除 PROMPT 和颜色配置
+        cat << EOF > "$ZSHRC_FILE"
+# 启用历史记录
+HISTFILE=~/.zsh_history
+HISTSIZE=1000
+SAVEHIST=1000
+setopt appendhistory
+EOF
+        chmod 600 "$ZSHRC_FILE"
+        echo "ZSH configuration applied." >> $LOGFILE
+    fi
+    # 确保历史文件存在
+    if [ ! -f "$ZSH_HISTORY_FILE" ]; then
+        touch "$ZSH_HISTORY_FILE"
+        chmod 600 "$ZSH_HISTORY_FILE"
+        echo "Created $ZSH_HISTORY_FILE." >> $LOGFILE
+    fi
+}
+configure_zsh
+
 exit 0
