@@ -113,13 +113,6 @@ HISTSIZE=1000
 SAVEHIST=1000
 setopt appendhistory
 
-# 启用 Git 信息提示
-autoload -Uz vcs_info
-precmd_vcs_info() { vcs_info }
-precmd_functions+=( precmd_vcs_info )
-setopt prompt_subst
-zstyle ':vcs_info:git:*' formats ' (%b)'
-
 # 定义 PROMPT
 PROMPT='%F{green}➜%f %F{blue}%1~%f%F{red}${vcs_info_msg_0_}%f %# '
 
