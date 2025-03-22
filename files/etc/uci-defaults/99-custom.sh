@@ -125,7 +125,7 @@ PROMPT='%F{green}➜%f %F{blue}%1~%f%F{red}${vcs_info_msg_0_}%f %# '
 
 # 增加banner显示
 if [[ -t 1 ]]; then
-  echo "Welcome to Zsh! $(date '+%Y-%m-%d %H:%M:%S')"
+  echo "Welcome to ImmortalWrt! $(date '+%Y-%m-%d %H:%M:%S')"
 fi
 
 EOF
