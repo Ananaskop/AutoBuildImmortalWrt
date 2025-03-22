@@ -97,4 +97,6 @@ FILE_PATH="/etc/openwrt_release"
 NEW_DESCRIPTION="Compiled by Ananaskop"
 sed -i "s/DISTRIB_DESCRIPTION='[^']*'/DISTRIB_DESCRIPTION='$NEW_DESCRIPTION'/" "$FILE_PATH"
 
+chsh -s /usr/bin/zsh
+
 exit 0
