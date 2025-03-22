@@ -45,8 +45,6 @@ PACKAGES="$PACKAGES ddns-scripts-cloudflare"
 PACKAGES="$PACKAGES nginx-ssl-util"
 PACKAGES="$PACKAGES nginx-full"
 PACKAGES="$PACKAGES zsh"
-PACKAGES="$PACKAGES htop"
-PACKAGES="$PACKAGES git-http"
 PACKAGES="$PACKAGES shadow-chsh"
 
 # 增加几个必备组件 方便用户安装iStore
