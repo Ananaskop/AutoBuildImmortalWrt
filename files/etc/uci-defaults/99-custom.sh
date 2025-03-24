@@ -100,17 +100,4 @@ sed -i "s/DISTRIB_DESCRIPTION='[^']*'/DISTRIB_DESCRIPTION='$NEW_DESCRIPTION'/" "
 # shell修改为bash
 chsh -s /bin/bash
 
-EOF
-        chmod 600 "$ZSHRC_FILE"
-        echo "ZSH configuration applied." >> $LOGFILE
-    fi
-    # 确保历史文件存在
-    if [ ! -f "$ZSH_HISTORY_FILE" ]; then
-        touch "$ZSH_HISTORY_FILE"
-        chmod 600 "$ZSH_HISTORY_FILE"
-        echo "Created $ZSH_HISTORY_FILE." >> $LOGFILE
-    fi
-}
-configure_zsh
-
 exit 0
