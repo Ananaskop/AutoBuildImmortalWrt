@@ -97,33 +97,8 @@ FILE_PATH="/etc/openwrt_release"
 NEW_DESCRIPTION="Compiled by Ananaskop"
 sed -i "s/DISTRIB_DESCRIPTION='[^']*'/DISTRIB_DESCRIPTION='$NEW_DESCRIPTION'/" "$FILE_PATH"
 
-chsh -s /usr/bin/zsh
-
-# 增加zsh历史记录配置
-configure_zsh() {
-    ZSHRC_FILE="/root/.zshrc"
-    ZSH_HISTORY_FILE="/root/.zsh_history"
-    if [ ! -f "$ZSHRC_FILE" ]; then
-        echo "Creating $ZSHRC_FILE..." >> $LOGFILE
-        # <修改> 删除 PROMPT 和颜色配置
-        cat << EOF > "$ZSHRC_FILE"
-# 启用历史记录
-HISTFILE=~/.zsh_history
-HISTSIZE=1000
-SAVEHIST=1000
-setopt appendhistory
-
-# 定义 PROMPT
-PROMPT='%F{green}➜%f %F{blue}%1~%f%F{red}${vcs_info_msg_0_}%f %# '
-
-# 增加banner显示
-if [[ -t 1 ]]; then
-  echo "Welcome to ImmortalWrt!"
-fi
-
-# 启用自动补全
-service() { eval "command service $@"; }
-compctl -k "($(ls /etc/init.d/))" service
+# shell修改为bash
+chsh -s /bin/bash
 
 EOF
         chmod 600 "$ZSHRC_FILE"
