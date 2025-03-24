@@ -121,6 +121,10 @@ if [[ -t 1 ]]; then
   echo "Welcome to ImmortalWrt!"
 fi
 
+# 启用自动补全
+service() { eval "command service $@"; }
+compctl -k "($(ls /etc/init.d/))" service
+
 EOF
         chmod 600 "$ZSHRC_FILE"
         echo "ZSH configuration applied." >> $LOGFILE
