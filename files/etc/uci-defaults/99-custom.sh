@@ -100,4 +100,14 @@ sed -i "s/DISTRIB_DESCRIPTION='[^']*'/DISTRIB_DESCRIPTION='$NEW_DESCRIPTION'/" "
 # shell修改为bash
 chsh -s /bin/bash
 
+# 修改 SSH 登录欢迎信息（/etc/banner）
+cat << EOF > /etc/banner
+-------------------------------------
+ Welcome to ImmortalWrt！
+-------------------------------------
+EOF
+
+# 设置文件权限
+chmod 644 /etc/banner
+
 exit 0
