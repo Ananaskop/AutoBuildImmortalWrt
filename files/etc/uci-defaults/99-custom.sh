@@ -103,7 +103,7 @@ chsh -s /bin/bash
 # 修改 SSH 登录欢迎信息（/etc/banner）
 cat << EOF > /etc/banner
 -------------------------------------
- Welcome to ImmortalWrt！
+ Welcome to ImmortalWrt by Ananaskop！
 -------------------------------------
 EOF
 
