@@ -7,6 +7,7 @@ echo "Include Docker: $INCLUDE_DOCKER"
 
 # add feed
 echo "src-git nikki https://github.com/nikkinikki-org/OpenWrt-nikki.git main" >> "feeds.conf.default"
+./scripts/feeds update -a
 
 echo "Create pppoe-settings"
 mkdir -p  /home/build/immortalwrt/files/etc/config
