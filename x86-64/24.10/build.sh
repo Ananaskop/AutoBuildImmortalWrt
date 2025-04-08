@@ -45,6 +45,7 @@ PACKAGES="$PACKAGES ddns-scripts-cloudflare"
 PACKAGES="$PACKAGES nginx-ssl-util"
 PACKAGES="$PACKAGES nginx-full"
 PACKAGES="$PACKAGES shadow-chsh"
+PACKAGES="$PACKAGES luci-i18n-wechatpush-zh-cn"
 
 # 增加几个必备组件 方便用户安装iStore
 PACKAGES="$PACKAGES fdisk"
