@@ -5,10 +5,6 @@ echo "Starting 99-custom.sh at $(date)" >> $LOGFILE
 echo "编译固件大小为: $PROFILE MB"
 echo "Include Docker: $INCLUDE_DOCKER"
 
-# add feed
-echo "src-git nikki https://github.com/nikkinikki-org/OpenWrt-nikki.git main" >> "feeds.conf.default"
-./scripts/feeds update -a
-
 echo "Create pppoe-settings"
 mkdir -p  /home/build/immortalwrt/files/etc/config
 
@@ -50,7 +46,6 @@ PACKAGES="$PACKAGES nginx-ssl-util"
 PACKAGES="$PACKAGES nginx-full"
 PACKAGES="$PACKAGES shadow-chsh"
 PACKAGES="$PACKAGES luci-i18n-wechatpush-zh-cn"
-PACKAGES="$PACKAGES luci-i18n-nikki-zh-cn"
 
 # 增加几个必备组件 方便用户安装iStore
 PACKAGES="$PACKAGES fdisk"
