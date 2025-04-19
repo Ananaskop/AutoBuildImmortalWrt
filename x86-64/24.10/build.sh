@@ -46,7 +46,6 @@ PACKAGES="$PACKAGES nginx-ssl-util"
 PACKAGES="$PACKAGES nginx-full"
 PACKAGES="$PACKAGES shadow-chsh"
 PACKAGES="$PACKAGES luci-i18n-wechatpush-zh-cn"
-PACKAGES="$PACKAGES shadowsocks-rust-ssserver"
 
 # 增加几个必备组件 方便用户安装iStore
 PACKAGES="$PACKAGES fdisk"
