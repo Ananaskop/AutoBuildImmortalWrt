@@ -80,34 +80,33 @@ else
         echo "PPPoE settings file not found. Skipping PPPoE configuration." >> $LOGFILE
     fi
 
+    # 添加docker zone
+    uci add firewall zone
+    uci set firewall.@zone[-1].name='docker'
+    uci set firewall.@zone[-1].input='ACCEPT'
+    uci set firewall.@zone[-1].output='ACCEPT'
+    uci set firewall.@zone[-1].forward='ACCEPT'
+    uci set firewall.@zone[-1].device='docker0'
+    
+    # 添加 forwarding docker -> lan
+    uci add firewall forwarding
+    uci set firewall.@forwarding[-1].src='docker'
+    uci set firewall.@forwarding[-1].dest='lan'
+    
+    # 添加 forwarding docker -> wan
+    uci add firewall forwarding
+    uci set firewall.@forwarding[-1].src='docker'
+    uci set firewall.@forwarding[-1].dest='wan'
+    
+    # 添加 forwarding lan -> docker
+    uci add firewall forwarding
+    uci set firewall.@forwarding[-1].src='lan'
+    uci set firewall.@forwarding[-1].dest='docker'
+    
     # 标记网络已配置，避免升级时重复执行
     touch "$NETWORK_CONFIG_MARKER"
     echo "Network configuration completed." >> $LOGFILE
 fi
-
-
-# 添加docker zone
-uci add firewall zone
-uci set firewall.@zone[-1].name='docker'
-uci set firewall.@zone[-1].input='ACCEPT'
-uci set firewall.@zone[-1].output='ACCEPT'
-uci set firewall.@zone[-1].forward='ACCEPT'
-uci set firewall.@zone[-1].device='docker0'
-
-# 添加 forwarding docker -> lan
-uci add firewall forwarding
-uci set firewall.@forwarding[-1].src='docker'
-uci set firewall.@forwarding[-1].dest='lan'
-
-# 添加 forwarding docker -> wan
-uci add firewall forwarding
-uci set firewall.@forwarding[-1].src='docker'
-uci set firewall.@forwarding[-1].dest='wan'
-
-# 添加 forwarding lan -> docker
-uci add firewall forwarding
-uci set firewall.@forwarding[-1].src='lan'
-uci set firewall.@forwarding[-1].dest='docker'
 
 # 允许所有网口访问 Web 终端 (ttyd)
 uci delete ttyd.@ttyd[0].interface
