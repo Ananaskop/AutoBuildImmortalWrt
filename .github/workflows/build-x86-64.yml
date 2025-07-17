@@ -42,7 +42,6 @@ jobs:
       - name: Set executable permissions
         run: chmod +x ${{ github.workspace }}/x86-64/build.sh
 
-
       - name: Validate PPPoE Inputs
         run: |
           if [[ "${{ inputs.enable_pppoe }}" == "yes" ]]; then
@@ -57,10 +56,10 @@ jobs:
           profiles="${{ github.event.inputs.profile }}"
           include_docker="${{ github.event.inputs.include_docker }}"
           IFS=',' read -r -a profile_array <<< "$profiles"
-          
+        
           for profile in "${profile_array[@]}"; do
             echo "Building for profile: $profile"
-            
+          
             docker run --rm -i \
               --user root \
               -v "${{ github.workspace }}/bin:/home/build/immortalwrt/bin" \
@@ -76,19 +75,19 @@ jobs:
               immortalwrt/imagebuilder:x86-64-openwrt-24.10.2 /bin/bash /home/build/immortalwrt/build.sh
           done
 
-      - name: Generate Firmware SHA-256
+      - name: Rename and Generate SHA-256
         run: |
-          cp ${{ github.workspace }}/bin/targets/x86/64/*squashfs-combined-efi.img.gz ${{ github.workspace }}
-          for file in *squashfs-combined-efi.img.gz; do
-            sha256sum "$file" > "$file.sha256"
-            sha256sum -c "$file.sha256"
-          done
+          original_file=$(find ${{ github.workspace }}/bin/targets/x86/64/ -name '*squashfs-combined-efi.img.gz' | head -n 1)
+          fixed_name="${{ github.workspace }}/immortalwrt-x86-64-generic-squashfs-combined-efi.img.gz"
+          cp "$original_file" "$fixed_name"
+          sha256sum "$fixed_name" > "${fixed_name}.sha256"
+          sha256sum -c "${fixed_name}.sha256"
 
       - name: Create info
         run: |
           if [ "${{ github.event.inputs.include_docker }}" == "yes" ]; then
             extra_content="#### 默认带docker"
-            echo -e "\n $extra_content" >> ${{ github.workspace }}/info.md
+            echo -e "\n$extra_content" >> ${{ github.workspace }}/info.md
           else
             echo -e "NO docker"
           fi
@@ -99,9 +98,8 @@ jobs:
           tag_name: Autobuild-x86-64
           body_path: ${{ github.workspace }}/info.md
           files: |
-            ${{ github.workspace }}/*squashfs-combined-efi.img.gz
-            ${{ github.workspace }}/*.sha256
+            ${{ github.workspace }}/immortalwrt-x86-64-generic-squashfs-combined-efi.img.gz
+            ${{ github.workspace }}/immortalwrt-x86-64-generic-squashfs-combined-efi.img.gz.sha256
           token: ${{ secrets.GITHUB_TOKEN }}
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-
