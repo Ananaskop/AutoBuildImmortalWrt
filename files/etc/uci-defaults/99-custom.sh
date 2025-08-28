@@ -59,9 +59,9 @@ else
 
         # 设置 LAN 静态 IP
         uci set network.lan.proto='static'
-        uci set network.lan.ipaddr='192.168.11.1'
+        uci set network.lan.ipaddr='192.168.20.1'
         uci set network.lan.netmask='255.255.255.0'
-        echo "Set LAN IP to 192.168.11.1" >> $LOGFILE
+        echo "Set LAN IP to 192.168.20.1" >> $LOGFILE
     fi
 
     # 处理 PPPoE 配置
