@@ -99,6 +99,17 @@ else
     echo "⚪️ 未选择 luci-app-openclash"
 fi
 
+# 若构建Nikki 则添加Geo文件
+if echo "$PACKAGES" | grep -q "luci-i18n-nikki-zh-cn"; then
+    echo "✅ 已选择 Nikki，添加 Geo文件"
+    mkdir -p files/etc/nikki/run
+    # Download GeoIP and GeoSite
+    wget -q https://github.com/Loyalsoldier/v2ray-rules-dat/releases/latest/download/geoip.dat -O files/etc/nikki/run/GeoIP.dat
+    wget -q https://github.com/Loyalsoldier/v2ray-rules-dat/releases/latest/download/geosite.dat -O files/etc/nikki/run/GeoSite.dat
+else
+    echo "⚪️ 未选择 Nikki"
+fi
+
 # 构建镜像
 echo "$(date '+%Y-%m-%d %H:%M:%S') - Building image with the following packages:"
 echo "$PACKAGES"
