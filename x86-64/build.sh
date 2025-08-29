@@ -63,7 +63,7 @@ PACKAGES="$PACKAGES luci-lib-ipkg"
 PACKAGES="$PACKAGES luci-i18n-ddns-zh-cn"
 PACKAGES="$PACKAGES ddns-scripts_aliyun"
 PACKAGES="$PACKAGES ddns-scripts-cloudflare"
-PACKAGES="$PACKAGES shadow-chsh"
+#PACKAGES="$PACKAGES shadow-chsh"
 PACKAGES="$PACKAGES luci-i18n-wechatpush-zh-cn"
 
 # 增加几个必备组件 方便用户安装iStore
